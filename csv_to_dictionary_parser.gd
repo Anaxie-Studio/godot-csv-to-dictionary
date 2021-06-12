@@ -1,10 +1,11 @@
 extends Node
 
 
-func parse(file_path: String,
+func parse(
+	file_path: String,
 	id_column: String = "id",
-	delimiter: String = ",") -> Dictionary:
-
+	delimiter: String = ","
+) -> Dictionary:
 	var file: File = File.new()
 	file.open(file_path, File.READ)
 
@@ -21,8 +22,19 @@ func parse(file_path: String,
 		else:
 			var entry: Dictionary = {}
 			for column_index in column_headers.size():
-				entry[column_headers[column_index]]	= line[column_index]
-			dict_data[id_column] = entry
+				var value = line[column_index]
+
+				# Detect bools.
+				if value is String:
+					var value_lower: String = value.to_lower()
+					if value_lower == "true":
+						value = true
+					elif value_lower == "false":
+						value = false
+
+				entry[column_headers[column_index]]	= value
+				if column_headers[column_index] == id_column:
+					dict_data[entry[id_column]] = entry
 
 	file.close()
 
