@@ -1,4 +1,3 @@
-class_name CsvToDictionaryParser
 extends Node
 
 
@@ -26,7 +25,5 @@ func parse(file_path: String,
 			dict_data[id_column] = entry
 
 	file.close()
-
-	print_debug(dict_data)
 
 	return dict_data
